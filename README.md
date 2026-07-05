@@ -11,7 +11,7 @@ Static GitHub Pages-ready documentation site for SMPWeapons. Redesigned as a sin
 5. Set **Source** to **Deploy from a branch**.
 6. Select branch `main` and folder `/root`.
 
-No build command is required.
+No build command is required. 
 
 ## Files
 
