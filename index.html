@@ -516,21 +516,6 @@ legacy:
       </div>
     </section>
 
-    <!-- Publishing -->
-    <section class="section" id="publishing">
-      <div class="section-head"><span class="eyebrow">GitHub Pages</span><h2>Publish this wiki</h2></div>
-      <p class="text-body">This repo is static and has no build step. Push the files to a GitHub repository, then enable Pages from the repository root.</p>
-      <div class="code-block" data-lang="bash">
-        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
-        <pre><code>git init
-git add .
-git commit -m "Publish SMPWeapons wiki"
-git branch -M main
-git remote add origin https://github.com/YOUR_USER/smpweapons-page.git
-git push -u origin main</code></pre>
-      </div>
-      <p class="text-body">Then open GitHub → repository Settings → Pages → Source: Deploy from a branch → Branch: <code>main</code> → Folder: <code>/root</code>.</p>
-    </section>
 
     <footer class="page-footer">
       <span>SMPWeapons Wiki · static GitHub Pages documentation</span>

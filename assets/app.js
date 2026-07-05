@@ -14,7 +14,6 @@ const DOC_INDEX = [
   { id: 'identity', title: 'Item identity', sub: 'Legacy matching', icon: 'bi-fingerprint', href: '#identity' },
   { id: 'hooks', title: 'Hooks', sub: 'SMPRegions hook', icon: 'bi-plug', href: '#hooks' },
   { id: 'troubleshooting', title: 'Troubleshooting', sub: 'Common issues', icon: 'bi-life-preserver', href: '#troubleshooting' },
-  { id: 'publishing', title: 'Publishing', sub: 'GitHub Pages', icon: 'bi-github', href: '#publishing' }
 ];
 
 function app() {
