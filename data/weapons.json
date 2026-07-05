@@ -1,0 +1,505 @@
+[
+  {
+    "id": "boom_crossbow",
+    "enabled": true,
+    "display": "Boom Crossbow",
+    "ability": "TIMELINE",
+    "trigger": "shoot: BOW_SHOOT · 28s",
+    "materials": [
+      "CROSSBOW",
+      "BOW"
+    ],
+    "lore": [
+      "Sneak and shoot to fire a real explosive arrow.",
+      "Impact deals AoE damage in radius.",
+      "No passive."
+    ],
+    "commands": [
+      "getboomcrossbow"
+    ],
+    "source": "client-weapons.yml"
+  },
+  {
+    "id": "flux_sword",
+    "enabled": true,
+    "display": "Flux Sword",
+    "ability": "TIMELINE",
+    "trigger": "cast: RIGHT_CLICK · 35s",
+    "materials": [
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "Passive: 10% chance to inflict Darkness.",
+      "Sneak right click to cast a warden beam."
+    ],
+    "commands": [
+      "getfluxsword"
+    ],
+    "source": "client-weapons.yml"
+  },
+  {
+    "id": "force_bow",
+    "enabled": true,
+    "display": "Force Bow",
+    "ability": "FORCE_BOW_DASH",
+    "trigger": "shoot: BOW_SHOOT · 20s",
+    "materials": [
+      "BOW"
+    ],
+    "lore": [
+      "Sneak and shoot to dash forward.",
+      "Dash power scales with bow charge.",
+      "No passive."
+    ],
+    "commands": [
+      "getforcebow"
+    ],
+    "source": "client-weapons.yml"
+  },
+  {
+    "id": "heavy_core",
+    "enabled": true,
+    "display": "Heavy Core",
+    "ability": "TIMELINE",
+    "trigger": "pull: RIGHT_CLICK · 45s",
+    "materials": [
+      "HEAVY_CORE",
+      "NETHER_STAR"
+    ],
+    "lore": [
+      "Not a weapon.",
+      "Sneak right click to pull nearby players for 4 seconds."
+    ],
+    "commands": [
+      "getheavycore"
+    ],
+    "source": "client-weapons.yml"
+  },
+  {
+    "id": "repell_shield",
+    "enabled": true,
+    "display": "Repell Shield",
+    "ability": "PASSIVE / PROJECTILE",
+    "trigger": "Passive / event-driven",
+    "materials": [
+      "SHIELD",
+      "BANNER"
+    ],
+    "lore": [
+      "Passive only.",
+      "Blocking has a 15% chance to reflect 40% damage."
+    ],
+    "commands": [
+      "getrepellshield"
+    ],
+    "source": "client-weapons.yml"
+  },
+  {
+    "id": "ultratotem",
+    "enabled": true,
+    "display": "Ultratotem",
+    "ability": "TIMELINE",
+    "trigger": "pop: TOTEM_POP · pop",
+    "materials": [
+      "TOTEM_OF_UNDYING",
+      "GOLDEN_APPLE"
+    ],
+    "lore": [
+      "Triggers when the totem pops.",
+      "Grants strong survival effects after pop.",
+      "No passive."
+    ],
+    "commands": [
+      "getultratotem"
+    ],
+    "source": "client-weapons.yml"
+  },
+  {
+    "id": "zero_point",
+    "enabled": true,
+    "display": "Zero Point",
+    "ability": "PASSIVE / PROJECTILE",
+    "trigger": "Passive / event-driven",
+    "materials": [
+      "HEART_OF_THE_SEA",
+      "PRISMARINE_CRYSTALS",
+      "NETHER_STAR"
+    ],
+    "lore": [
+      "Passive only.",
+      "Grants Conduit Power while carried in inventory."
+    ],
+    "commands": [
+      "getzeropoint"
+    ],
+    "source": "client-weapons.yml"
+  },
+  {
+    "id": "cobweb_axe",
+    "enabled": true,
+    "display": "ᴄᴏʙᴡᴇʙ ᴀxᴇ",
+    "ability": "COBWEB_PROJECTILE",
+    "trigger": "SNEAK_RIGHT_CLICK · 30s",
+    "materials": [
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "Passive | 20%% chance to place temporary cobweb on hit.",
+      "ᴡᴇʙ ᴄʟᴇᴀʀᴇʀ",
+      "⌚ 30s ▹ ᴏꜰꜰʜᴀɴᴅ",
+      "Clear all cobwebs in a 4 block radius"
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "dash_mace",
+    "enabled": true,
+    "display": "ᴅᴀꜱʜ ᴍᴀᴄᴇ",
+    "ability": "DASH_AOE",
+    "trigger": "SNEAK_RIGHT_CLICK · 25s",
+    "materials": [
+      "MACE",
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "ᴅᴀsʜ",
+      "⌚ 25s ▹ sʜɪғᴛ + ʀɪɢʜᴛ ᴄʟɪᴄᴋ",
+      "Dash forward with immense force, decelerating quickly",
+      "and knocking entities away while in air."
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "dash_sword",
+    "enabled": true,
+    "display": "ᴅᴀꜱʜ ꜱᴡᴏʀᴅ",
+    "ability": "DASH_AOE",
+    "trigger": "SNEAK_RIGHT_CLICK · 30s",
+    "materials": [
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "sᴡᴏʀᴅ ᴅᴀsʜ",
+      "⌚ 30s ▹ sʜɪғᴛ + ʀɪɢʜᴛ ᴄʟɪᴄᴋ",
+      "Dash forward in the direction you're looking,",
+      "leaving a trail of wind particles behind you"
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "gravity_axe",
+    "enabled": true,
+    "display": "ɢʀᴀᴠɪᴛʏ ᴀxᴇ",
+    "ability": "GRAVITY_LIFT",
+    "trigger": "SNEAK_RIGHT_CLICK · 35s",
+    "materials": [
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "ᴀɴᴛɪ-ɢʀᴀᴠɪᴛʏ",
+      "⌚ 35s ▹ sʜɪғᴛ + ʀɪɢʜᴛ ᴄʟɪᴄᴋ",
+      "All nearby entities are lifted into the air,",
+      "gaining Levitation V for 3s and Blindness for 5s."
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "rocket_spear",
+    "enabled": true,
+    "display": "ʀᴏᴄᴋᴇᴛ ꜱᴘᴇᴀʀ",
+    "ability": "ROCKET_LIFT",
+    "trigger": "SNEAK_RIGHT_CLICK · 35s",
+    "materials": [
+      "NETHERITE_SPEAR",
+      "TRIDENT",
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "ʀᴏᴄᴋᴇᴛ ʟɪғᴛ",
+      "⌚ 35s ▹ sʜɪғᴛ + ʀɪɢʜᴛ ᴄʟɪᴄᴋ",
+      "Launch yourself into the air 25 blocks high,",
+      "gaining elytra-like gliding."
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "venom_sword",
+    "enabled": true,
+    "display": "ᴠᴇɴᴏᴍ ꜱᴡᴏʀᴅ",
+    "ability": "VENOM_DASH",
+    "trigger": "SNEAK_RIGHT_CLICK · 35s",
+    "materials": [
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "Passive | 10%% chance to inflict slowness I for 3s on hit.",
+      "ᴠᴇɴᴏᴍ ᴅᴀsʜ",
+      "⌚ 35s ▹ sʜɪғᴛ + ʀɪɢʜᴛ ᴄʟɪᴄᴋ",
+      "Dash forward, poisoning all entities in your path."
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "viking_spear",
+    "enabled": true,
+    "display": "ᴠɪᴋɪɴɢ ꜱᴘᴇᴀʀ",
+    "ability": "SELF_BUFF",
+    "trigger": "SNEAK_RIGHT_CLICK · 35s",
+    "materials": [
+      "NETHERITE_SPEAR",
+      "TRIDENT",
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "ʙᴇʀsᴇʀᴋᴇʀ ʀᴀɢᴇ",
+      "⌚ 35s ▹ sʜɪғᴛ + ʀɪɢʜᴛ ᴄʟɪᴄᴋ",
+      "Enter a raging state for 6 seconds,",
+      "gaining Speed III, Strength III, & Saturation"
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "wind_spear",
+    "enabled": true,
+    "display": "ᴡɪɴᴅ ꜱᴘᴇᴀʀ",
+    "ability": "DASH_AOE",
+    "trigger": "SNEAK_RIGHT_CLICK · 30s",
+    "materials": [
+      "NETHERITE_SPEAR",
+      "TRIDENT",
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "ʟᴜɴɢᴇ",
+      "⌚ 30s ▹ sʜɪғᴛ + ʀɪɢʜᴛ ᴄʟɪᴄᴋ",
+      "Dash forward with air particles surrounding you",
+      "and knocking entities away while in air."
+    ],
+    "commands": [],
+    "source": "default-weapons.yml"
+  },
+  {
+    "id": "explosive_mace",
+    "enabled": true,
+    "display": "ᴇxᴘʟᴏꜱɪᴠᴇ ᴍᴀᴄᴇ",
+    "ability": "EXPLOSIVE_MACE",
+    "trigger": "SNEAK_RIGHT_CLICK · 30s",
+    "materials": [
+      "MACE",
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "Shift right click to enter a rage!",
+      "Buffs you and levitates nearby enemies.",
+      "Cooldown: 30 secs"
+    ],
+    "commands": [
+      "getexplosivemace"
+    ],
+    "source": "more-weapons.yml"
+  },
+  {
+    "id": "flow_spear",
+    "enabled": true,
+    "display": "ꜰʟᴏᴡ ꜱᴘᴇᴀʀ",
+    "ability": "FLOW_SPEAR",
+    "trigger": "SNEAK_RIGHT_CLICK · 30s",
+    "materials": [
+      "NETHERITE_SPEAR",
+      "TRIDENT",
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "Shift right click to dash forward!",
+      "Cooldown: 30 secs"
+    ],
+    "commands": [
+      "getflowspear"
+    ],
+    "source": "more-weapons.yml"
+  },
+  {
+    "id": "slam_mace",
+    "enabled": true,
+    "display": "ꜱʟᴀᴍ ᴍᴀᴄᴇ",
+    "ability": "SLAM_MACE",
+    "trigger": "SNEAK_RIGHT_CLICK · 25s",
+    "materials": [
+      "MACE",
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "Shift right click to slam down on players",
+      "This ability also clears webs",
+      "Cooldown: 25 secs"
+    ],
+    "commands": [
+      "getslammace"
+    ],
+    "source": "more-weapons.yml"
+  },
+  {
+    "id": "tide_trident",
+    "enabled": true,
+    "display": "ᴛɪᴅᴇ ᴛʀɪᴅᴇɴᴛ",
+    "ability": "TIDE_TRIDENT",
+    "trigger": "SNEAK_RIGHT_CLICK · 35s",
+    "materials": [
+      "TRIDENT"
+    ],
+    "lore": [
+      "Shift right click to dash forward!",
+      "Blasts nearby enemies with Wither.",
+      "Cooldown: 35 secs"
+    ],
+    "commands": [
+      "gettidetrident"
+    ],
+    "source": "more-weapons.yml"
+  },
+  {
+    "id": "warrior_spear",
+    "enabled": true,
+    "display": "ᴡᴀʀʀɪᴏʀ ꜱᴘᴇᴀʀ",
+    "ability": "SELF_BUFF",
+    "trigger": "SNEAK_RIGHT_CLICK · 40s",
+    "materials": [
+      "NETHERITE_SPEAR",
+      "TRIDENT",
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "Shift right click to trigger a combat battle cry!",
+      "Grants Strength III, Speed III, and Absorption II.",
+      "Cooldown: 40 secs"
+    ],
+    "commands": [
+      "getwarriorspear"
+    ],
+    "source": "more-weapons.yml"
+  },
+  {
+    "id": "zoom_mace",
+    "enabled": true,
+    "display": "ᴢᴏᴏᴍ ᴍᴀᴄᴇ",
+    "ability": "ZOOM_MACE",
+    "trigger": "SNEAK_RIGHT_CLICK · 40s",
+    "materials": [
+      "MACE",
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "Shift right click to launch 30 blocks high!",
+      "Crash down and deal area damage.",
+      "Cooldown: 40 secs"
+    ],
+    "commands": [
+      "getzoommace"
+    ],
+    "source": "more-weapons.yml"
+  },
+  {
+    "id": "example_107_context_weapon",
+    "enabled": false,
+    "display": "example 1.0.7 context weapon",
+    "ability": "TIMELINE",
+    "trigger": "primary: RIGHT_CLICK · 30s / quick_left: LEFT_CLICK · 10s",
+    "materials": [
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "Shows top-level projectiles, on_hit timelines, and hit passives."
+    ],
+    "commands": [],
+    "source": "examples.yml"
+  },
+  {
+    "id": "example_cobweb_bomb_axe",
+    "enabled": false,
+    "display": "example cobweb bomb axe",
+    "ability": "COBWEB_PROJECTILE",
+    "trigger": "SNEAK_RIGHT_CLICK · 30s",
+    "materials": [
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "Web Bomb",
+      "⌚ 30s ▹ sneak + right click",
+      "Throws a web charge that blooms and collapses."
+    ],
+    "commands": [],
+    "source": "examples.yml"
+  },
+  {
+    "id": "example_map_dsl_sword",
+    "enabled": false,
+    "display": "example map dsl sword",
+    "ability": "TIMELINE",
+    "trigger": "SNEAK_RIGHT_CLICK · 15s",
+    "materials": [
+      "NETHERITE_SWORD",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "Shows the 1.0.3 map-style timeline syntax."
+    ],
+    "commands": [],
+    "source": "examples.yml"
+  },
+  {
+    "id": "example_timeline_spear",
+    "enabled": false,
+    "display": "example timeline spear",
+    "ability": "TIMELINE",
+    "trigger": "SNEAK_RIGHT_CLICK · 20s",
+    "materials": [
+      "NETHERITE_SPEAR",
+      "TRIDENT",
+      "DIAMOND_SWORD"
+    ],
+    "lore": [
+      "Minimal action timeline example."
+    ],
+    "commands": [],
+    "source": "examples.yml"
+  },
+  {
+    "id": "example_v2_trigger_projectile",
+    "enabled": false,
+    "display": "example v2 trigger projectile",
+    "ability": "TIMELINE",
+    "trigger": "primary: RIGHT_CLICK · 30s",
+    "materials": [
+      "NETHERITE_AXE",
+      "DIAMOND_AXE"
+    ],
+    "lore": [
+      "Shows triggers/cooldowns/timelines/projectiles syntax."
+    ],
+    "commands": [],
+    "source": "examples.yml"
+  }
+]

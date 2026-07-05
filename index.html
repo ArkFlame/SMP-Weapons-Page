@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en" data-bs-theme="custom">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMPWeapons Wiki — Custom Ability Weapons for Minecraft SMP Servers</title>
+<meta name="description" content="SMPWeapons documentation: installation, commands, permissions, weapon YAML, timeline DSL, built-in weapons, menus, and troubleshooting.">
+<meta name="theme-color" content="#0a0a0f">
+<meta property="og:title" content="SMPWeapons Wiki">
+<meta property="og:description" content="Custom ability weapons, timelines, passives, projectiles, menus, and Folia-aware SMP weapon systems.">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div x-data="app()" x-init="init()" x-cloak>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="btn-icon d-lg-none" @click="navOpen = !navOpen" aria-label="Toggle navigation"><i class="bi bi-list"></i></button>
+    <a class="brand" href="#top">
+      <img src="assets/logo.svg" alt="" width="28" height="28">
+      <span>SMPWeapons<small>Documentation</small></span>
+    </a>
+    <div class="topbar-search d-none d-md-flex">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Search docs and weapons..." x-model="globalQuery" @input="runGlobalSearch()" @focus="searchFocused = true" @blur="setTimeout(() => searchFocused = false, 150)">
+      <kbd>/</kbd>
+      <div class="search-results" x-show="searchFocused && globalQuery.length > 1" x-transition>
+        <template x-if="globalResults.length === 0">
+          <div class="search-empty">No matches.</div>
+        </template>
+        <template x-for="r in globalResults" :key="r.id">
+          <a :href="r.href" class="search-result" @mousedown.prevent="goTo(r.href)">
+            <i :class="'bi ' + r.icon"></i>
+            <div><strong x-text="r.title"></strong><span x-text="r.sub"></span></div>
+          </a>
+        </template>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <a class="btn-pill" href="#quickstart"><i class="bi bi-download"></i><span class="d-none d-sm-inline">Install</span></a>
+      <a class="btn-pill primary" href="#built-ins"><i class="bi bi-grid-3x3-gap"></i><span class="d-none d-sm-inline">Weapons</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <nav class="sidebar" :class="navOpen ? 'open' : ''" aria-label="Documentation navigation">
+    <div class="sidebar-scroll">
+      <div class="nav-group">Start</div>
+      <a href="#overview" class="nav-link" :class="activeSection==='overview' && 'active'">Overview</a>
+      <a href="#quickstart" class="nav-link" :class="activeSection==='quickstart' && 'active'">Quick start</a>
+      <a href="#requirements" class="nav-link" :class="activeSection==='requirements' && 'active'">Requirements</a>
+
+      <div class="nav-group">Admin</div>
+      <a href="#commands" class="nav-link" :class="activeSection==='commands' && 'active'">Commands</a>
+      <a href="#permissions" class="nav-link" :class="activeSection==='permissions' && 'active'">Permissions</a>
+      <a href="#configuration" class="nav-link" :class="activeSection==='configuration' && 'active'">Configuration</a>
+      <a href="#menus" class="nav-link" :class="activeSection==='menus' && 'active'">Menus</a>
+
+      <div class="nav-group">Weapons</div>
+      <a href="#weapon-format" class="nav-link" :class="activeSection==='weapon-format' && 'active'">Weapon YAML</a>
+      <a href="#triggers" class="nav-link" :class="activeSection==='triggers' && 'active'">Triggers</a>
+      <a href="#timeline" class="nav-link" :class="activeSection==='timeline' && 'active'">Timeline DSL</a>
+      <a href="#command-weapons" class="nav-link" :class="activeSection==='command-weapons' && 'active'">Command weapons</a>
+      <a href="#built-ins" class="nav-link" :class="activeSection==='built-ins' && 'active'">Built-ins <span class="nav-count" x-text="weapons.length"></span></a>
+
+      <div class="nav-group">Support</div>
+      <a href="#identity" class="nav-link" :class="activeSection==='identity' && 'active'">Item identity</a>
+      <a href="#hooks" class="nav-link" :class="activeSection==='hooks' && 'active'">Hooks</a>
+      <a href="#troubleshooting" class="nav-link" :class="activeSection==='troubleshooting' && 'active'">Troubleshooting</a>
+      <a href="#publishing" class="nav-link" :class="activeSection==='publishing' && 'active'">Publishing</a>
+    </div>
+  </nav>
+  <div class="sidebar-backdrop d-lg-none" :class="navOpen ? 'show' : ''" @click="navOpen = false"></div>
+
+  <!-- Main -->
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="eyebrow"><i class="bi bi-lightning-charge-fill"></i> Custom SMP weapon engine</div>
+      <h1>Ability weapons without messy server glue.</h1>
+      <p class="lead">SMPWeapons is a Bukkit-family Minecraft plugin for configurable custom weapons: dash swords, maces, tridents, shields, totems, projectile abilities, timeline scripts, menu distribution, cooldowns, region checks, and MiniMessage-ready items.</p>
+      <div class="hero-actions">
+        <a class="btn-cta primary" href="#quickstart"><i class="bi bi-rocket-takeoff"></i> Install the plugin</a>
+        <a class="btn-cta" href="#timeline"><i class="bi bi-code-slash"></i> Read the ability DSL</a>
+        <a class="btn-cta" href="#command-weapons"><i class="bi bi-terminal"></i> Command-run items</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><strong x-text="enabledCount"></strong><span>enabled bundled weapons</span></div>
+        <div class="stat"><strong x-text="sourceCount"></strong><span>example config files</span></div>
+        <div class="stat"><strong>14</strong><span>ability families</span></div>
+        <div class="stat"><strong>1.8–1.21</strong><span>version compatibility</span></div>
+      </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section" id="overview">
+      <div class="section-head"><span class="eyebrow">Overview</span><h2>What SMPWeapons does</h2></div>
+      <p class="text-body">SMPWeapons turns YAML weapon definitions into usable in-game items. Each weapon can define item metadata, material fallbacks, legacy matching rules, commands, cooldowns, triggers, abilities, passive effects, projectiles, particle shapes, temporary blocks, and menus.</p>
+      <div class="card-grid cols-3">
+        <div class="feature-card">
+          <div class="icon-badge"><i class="bi bi-file-earmark-code"></i></div>
+          <h3>Config-driven weapons</h3>
+          <p>Weapons live under the configured <code>weapons</code> folder. Bundled files include default, more, client-requested, custom, and examples.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon-badge"><i class="bi bi-cpu"></i></div>
+          <h3>Ability engine</h3>
+          <p>Built-in ability types cover dash, lift, slam, zoom, poison, projectile, self-buff, timeline, inventory passive, totem pop, and shield block flows.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon-badge"><i class="bi bi-shield-check"></i></div>
+          <h3>Server-friendly controls</h3>
+          <p>Cooldowns, optional per-weapon permissions, region denial through SMPRegions, menu click throttling, virtual block caps, and engine limits are configured centrally.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick start -->
+    <section class="section" id="quickstart">
+      <div class="section-head"><span class="eyebrow">Quick start</span><h2>Installation</h2></div>
+      <ol class="step-list">
+        <li>Place the SMPWeapons jar in your server <code>plugins/</code> folder.</li>
+        <li>Start the server once so default files generate.</li>
+        <li>Edit <code>plugins/SMPWeapons/config.yml</code>, <code>menus.yml</code>, <code>messages.yml</code>, and files under <code>weapons/</code>.</li>
+        <li>Run <code>/smpweapons reload</code>.</li>
+        <li>Use <code>/smpweapons menu</code>, <code>/smpweapons get &lt;weapon&gt;</code>, or dynamic menu commands such as <code>/ffaweapons</code> when enabled.</li>
+      </ol>
+      <div class="code-block" data-lang="bash">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code># Basic admin flow
+/smpweapons list
+/smpweapons get dash_sword
+/smpweapons give Steve rocket_spear 1
+/smpweapons reload</code></pre>
+      </div>
+      <div class="callout warning"><i class="bi bi-exclamation-triangle-fill"></i><div><strong>Production rule:</strong> keep custom weapons in <code>weapons/custom-weapons.yml</code> or your own extra file. Do not edit defaults unless you are fine with replacing them during updates.</div></div>
+    </section>
+
+    <!-- Requirements -->
+    <section class="section" id="requirements">
+      <div class="section-head"><span class="eyebrow">Compatibility</span><h2>Requirements and compatibility</h2></div>
+      <div class="card-grid cols-2">
+        <div class="feature-card">
+          <h3><i class="bi bi-server"></i> Server platform</h3>
+          <p>The plugin descriptor targets Bukkit-family servers with <code>api-version: 1.13</code> and declares <code>folia-supported: true</code>. Material aliases let one config use modern and fallback materials.</p>
+        </div>
+        <div class="feature-card">
+          <h3><i class="bi bi-plug"></i> Optional hook</h3>
+          <p><code>SMPRegions</code> is listed as a soft dependency. When enabled, weapon use can be denied in regions where PvP is denied or in explicit blacklisted regions.</p>
+        </div>
+      </div>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code># plugin.yml highlights
+commands:
+  smpweapons:
+    aliases: [smpweapon, weapons]
+softdepend:
+  - SMPRegions
+folia-supported: true</code></pre>
+      </div>
+    </section>
+
+    <!-- Commands -->
+    <section class="section" id="commands">
+      <div class="section-head"><span class="eyebrow">Commands</span><h2>Admin and player commands</h2></div>
+      <div class="table-card">
+        <table>
+          <thead><tr><th>Command</th><th>Purpose</th><th>Permission</th></tr></thead>
+          <tbody>
+            <tr><td><code>/smpweapons help</code></td><td>Show command help.</td><td><code>smpweapons.use</code></td></tr>
+            <tr><td><code>/smpweapons menu [menu]</code></td><td>Open a configured weapon menu. Defaults to the configured default menu.</td><td><code>smpweapons.menu</code></td></tr>
+            <tr><td><code>/smpweapons list</code></td><td>List enabled weapons loaded from the weapons folder.</td><td><code>smpweapons.list</code></td></tr>
+            <tr><td><code>/smpweapons get &lt;weapon&gt; [amount]</code></td><td>Give yourself a weapon by id.</td><td><code>smpweapons.get</code></td></tr>
+            <tr><td><code>/smpweapons give &lt;player&gt; &lt;weapon&gt; [amount]</code></td><td>Give another player a weapon.</td><td><code>smpweapons.give</code></td></tr>
+            <tr><td><code>/smpweapons create &lt;weapon&gt;</code></td><td>Save the item in your hand into the custom weapons file.</td><td><code>smpweapons.create</code></td></tr>
+            <tr><td><code>/smpweapons delete &lt;weapon&gt;</code></td><td>Remove a custom weapon entry.</td><td><code>smpweapons.delete</code></td></tr>
+            <tr><td><code>/smpweapons cooldown [player] [weapon|all]</code></td><td>Reset all cooldowns or one weapon cooldown.</td><td><code>smpweapons.cooldown</code></td></tr>
+            <tr><td><code>/smpweapons debug item|blocks|restoreblocks|validate</code></td><td>Inspect identity, temporary blocks, restoration, and config validity.</td><td><code>smpweapons.debug</code></td></tr>
+            <tr><td><code>/smpweapons reload</code></td><td>Reload config, menus, messages, and weapons.</td><td><code>smpweapons.reload</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Permissions -->
+    <section class="section" id="permissions">
+      <div class="section-head"><span class="eyebrow">Permissions</span><h2>Permission reference</h2></div>
+      <p class="text-body">Most permissions default to operator in the plugin descriptor. Enable <code>settings.require-use-permission</code> when every weapon use should be permission-gated.</p>
+      <div class="table-card">
+        <table>
+          <thead><tr><th>Permission</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>smpweapons.use</code></td><td>Base access to /smpweapons.</td></tr>
+            <tr><td><code>smpweapons.admin</code></td><td>Administrative umbrella permission.</td></tr>
+            <tr><td><code>smpweapons.menu</code></td><td>Open weapon menus.</td></tr>
+            <tr><td><code>smpweapons.menu.admin</code></td><td>Open the admin weapon menu.</td></tr>
+            <tr><td><code>smpweapons.menu.ffa</code></td><td>Open the FFA weapons menu.</td></tr>
+            <tr><td><code>smpweapons.command.ffaweapons</code></td><td>Use the dynamic FFA menu command when registered.</td></tr>
+            <tr><td><code>smpweapons.list</code></td><td>List enabled weapons.</td></tr>
+            <tr><td><code>smpweapons.get</code></td><td>Get weapons for yourself.</td></tr>
+            <tr><td><code>smpweapons.give</code></td><td>Give weapons to other players.</td></tr>
+            <tr><td><code>smpweapons.create</code></td><td>Create custom weapon entries from held items.</td></tr>
+            <tr><td><code>smpweapons.delete</code></td><td>Delete custom weapon entries.</td></tr>
+            <tr><td><code>smpweapons.cooldown</code></td><td>Reset cooldowns.</td></tr>
+            <tr><td><code>smpweapons.reload</code></td><td>Reload plugin files.</td></tr>
+            <tr><td><code>smpweapons.debug</code></td><td>Use debug/admin inspection tools.</td></tr>
+            <tr><td><code>smpweapons.bypasscooldown.*</code></td><td>Bypass weapon cooldowns when cooldown bypass is enabled.</td></tr>
+            <tr><td><code>smpweapons.weapon.*.use</code></td><td>Use all weapons when per-weapon use permission is required.</td></tr>
+            <tr><td><code>smpweapons.weapon.&lt;id&gt;.use</code></td><td>Use one weapon when per-weapon use permission is required.</td></tr>
+            <tr><td><code>smpweapons.weapon.*.get</code></td><td>Get all weapons where per-weapon get permission is checked.</td></tr>
+            <tr><td><code>smpweapons.weapon.*.give</code></td><td>Give all weapons where per-weapon give permission is checked.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Configuration -->
+    <section class="section" id="configuration">
+      <div class="section-head"><span class="eyebrow">Configuration</span><h2>Config file map</h2></div>
+      <div class="card-grid cols-2">
+        <div class="feature-card"><h3><code>config.yml</code></h3><p>Main settings, menu defaults, weapon folder, cooldown behavior, item protection, hooks, sounds, engine limits, virtual/real block behavior, material compatibility, dynamic command registration, and tab completion.</p></div>
+        <div class="feature-card"><h3><code>menus.yml</code></h3><p>Admin and FFA menu layouts, titles, permissions, command registration, filler items, weapon slots, click actions, and pagination.</p></div>
+        <div class="feature-card"><h3><code>messages.yml</code></h3><p>MiniMessage-ready player/admin messages, help text, cooldown notices, menu titles, and errors.</p></div>
+        <div class="feature-card"><h3><code>weapons/*.yml</code></h3><p>Weapon definitions. Loaded from the configured folder, sorted by filename. Duplicate ids require <code>override: true</code>.</p></div>
+      </div>
+      <h3 class="sub-head">Important main settings</h3>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>settings:
+  default-menu: admin
+  weapons-folder: weapons
+  custom-weapons-file: weapons/custom-weapons.yml
+  give-created-weapons-pdc-identity: true
+  detect-legacy-items: true
+  require-sneak-for-default-abilities: true
+  require-use-permission: false
+  cooldown-bypass-enabled: false
+commands:
+  register-dynamic-commands: true
+  intercept-unknown-menu-commands: true
+  update-tab-completion: true</code></pre>
+      </div>
+    </section>
+
+    <!-- Weapon format -->
+    <section class="section" id="weapon-format">
+      <div class="section-head"><span class="eyebrow">Weapon YAML</span><h2>Weapon definition format</h2></div>
+      <p class="text-body">A weapon id must be normalized as lowercase letters, numbers, and underscores. Each weapon should define enabled state, display id, item metadata, optional legacy matchers, commands, cooldowns/triggers, and either a built-in ability type or timeline DSL.</p>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>weapons:
+  dash_sword:
+    enabled: true
+    display-id: 'Dash Sword'
+    item:
+      material: [NETHERITE_SWORD, DIAMOND_SWORD]
+      name: '&lt;gradient:#D2DBF1:#75777A&gt;&lt;bold&gt;Dash Sword&lt;/bold&gt;&lt;/gradient&gt;'
+      lore:
+        - '&lt;gray&gt;Shift + right click to dash forward.'
+      custom-model-data: 23425
+      enchants: ['DAMAGE_ALL:5', 'DURABILITY:3']
+    legacy:
+      custom-model-data: 23425
+      names-contains: ['Dash Sword']
+    commands:
+      get: ['getdashsword']
+    trigger:
+      type: SNEAK_RIGHT_CLICK
+      cooldown: 30
+    ability:
+      type: DASH_AOE
+      upward: 0.5
+      forward: 2.5
+      burst-radius: 3.0
+      damage: 2.0</code></pre>
+      </div>
+    </section>
+
+    <!-- Triggers -->
+    <section class="section" id="triggers">
+      <div class="section-head"><span class="eyebrow">Activation</span><h2>Triggers, conditions, cooldowns</h2></div>
+      <p class="text-body">The source supports a legacy single <code>trigger</code> block and a modern multi-trigger <code>triggers</code> block. Use the modern structure when a weapon needs multiple actions, named cooldowns, bow/crossbow events, totem pop events, or alternate left/right click behavior.</p>
+      <div class="card-grid cols-2">
+        <div class="feature-card"><h3>Common events</h3><p><code>RIGHT_CLICK</code>, <code>LEFT_CLICK</code>, <code>BOW_SHOOT</code>, <code>TOTEM_POP</code>, <code>DAMAGE_DEALT</code>, <code>HIT</code>, <code>SHIELD_BLOCK</code>, and <code>INVENTORY_TICK</code> appear in bundled configs.</p></div>
+        <div class="feature-card"><h3>Common conditions</h3><p><code>SNEAKING</code>, <code>NOT_SNEAKING</code>, <code>MAIN_HAND</code>, <code>FULL_ATTACK_COOLDOWN</code>, and <code>HAS_PERMISSION:node</code> are used by active or example flows.</p></div>
+      </div>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>cooldowns:
+  primary: { seconds: 30 }
+  alternate: { seconds: 10 }
+triggers:
+  primary:
+    events: [RIGHT_CLICK]
+    conditions: [SNEAKING, MAIN_HAND]
+    cooldown: primary
+    timeline: cast_projectile
+  quick_left:
+    events: [LEFT_CLICK]
+    conditions: [SNEAKING, MAIN_HAND]
+    cooldown: alternate
+    timeline: quick_burst</code></pre>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="section" id="timeline">
+      <div class="section-head"><span class="eyebrow">Ability DSL</span><h2>Timeline DSL</h2></div>
+      <p class="text-body"><code>ability.type: TIMELINE</code> lets you schedule actions by tick. Keys can be a single tick or a range expression such as <code>'10..30 step 5'</code>. Timeline actions run on the owning player/entity scheduler path.</p>
+      <div class="card-grid cols-3">
+        <div class="feature-card"><h3><i class="bi bi-stars"></i> Visuals</h3><p><code>sound</code>, <code>particle</code>, <code>particle_shape</code>, <code>beam</code>, <code>message</code>, <code>actionbar</code>, <code>title</code>.</p></div>
+        <div class="feature-card"><h3><i class="bi bi-crosshair"></i> Combat</h3><p><code>velocity</code>, <code>damage</code>, <code>raw_damage</code>, <code>damage_once</code>, <code>explosion</code>, <code>potion</code>, <code>clear_effect</code>, <code>pull</code>.</p></div>
+        <div class="feature-card"><h3><i class="bi bi-bricks"></i> World / projectile</h3><p><code>temporary_block</code>, <code>virtual_block</code>, <code>shape_block_wave</code>, <code>clear_blocks</code>, <code>spawn_projectile</code>, <code>remove_projectile</code>, <code>sync_block</code>, <code>restore_block</code>.</p></div>
+      </div>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>ability:
+  type: TIMELINE
+  timeline:
+    0:
+      - sound: { target: caster, name: ENTITY_PLAYER_ATTACK_SWEEP, volume: 1.0, pitch: 1.0 }
+      - velocity: { target: caster, mode: LOOK, forward: 1.5, upward: 0.35 }
+      - fall_protection: { target: caster, enabled: true }
+    8:
+      - temporary_block: { origin: target_block, mode: fake, block: COBWEB, ttl-ticks: 40 }
+    '10..30 step 5':
+      - damage_once: { selector: { type: nearby_living, radius: 3, include-caster: false }, amount: 2.0, mode: RAW_HEALTH }</code></pre>
+      </div>
+    </section>
+
+    <!-- Command weapons -->
+    <section class="section" id="command-weapons">
+      <div class="section-head"><span class="eyebrow">Command items</span><h2>Command-run weapons</h2></div>
+      <p class="text-body">Use the timeline <code>command</code> action when you want a right-click item that only runs a command, such as <code>/sell all</code>. The command can run as console or as the player. Do not include the leading slash unless you prefer it; the engine strips it before dispatching.</p>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>weapons:
+  sell_wand:
+    enabled: true
+    display-id: 'Sell Wand'
+    item:
+      material: [BLAZE_ROD, STICK]
+      name: '&lt;gold&gt;&lt;bold&gt;Sell Wand&lt;/bold&gt;&lt;/gold&gt;'
+      lore:
+        - '&lt;gray&gt;Right click to sell all items.'
+    commands:
+      get: ['getsellwand']
+    trigger:
+      type: RIGHT_CLICK
+      cooldown: 3
+    ability:
+      type: TIMELINE
+      timeline:
+        0:
+          - command:
+              sender: player
+              value: 'sell all'
+          - actionbar:
+              text: '&lt;green&gt;Selling inventory...'</code></pre>
+      </div>
+      <div class="callout danger"><i class="bi bi-shield-exclamation"></i><div><strong>Security:</strong> use <code>sender: console</code> only for trusted admin-made weapons. Console commands can bypass normal player permission checks.</div></div>
+    </section>
+
+    <!-- Built-ins -->
+    <section class="section" id="built-ins">
+      <div class="section-head"><span class="eyebrow">Bundled pack</span><h2>Built-in weapons</h2></div>
+      <p class="text-body">Search the loaded default, more, client, and example weapon definitions extracted from the source resources. Disabled entries are examples, not active weapons.</p>
+
+      <div class="weapon-toolbar">
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search weapon, ability, material, command..." x-model="query">
+        </div>
+        <select x-model="filterState">
+          <option value="all">All states</option>
+          <option value="enabled">Enabled only</option>
+          <option value="example">Examples only</option>
+        </select>
+        <select x-model="filterSource">
+          <option value="all">All sources</option>
+          <template x-for="s in sources" :key="s"><option :value="s" x-text="s"></option></template>
+        </select>
+      </div>
+
+      <p class="result-count" x-text="filteredWeapons.length + ' of ' + weapons.length + ' weapons'"></p>
+
+      <div class="weapon-grid">
+        <template x-for="w in filteredWeapons" :key="w.id">
+          <article class="weapon-card" :class="!w.enabled && 'is-example'">
+            <div class="weapon-card-head">
+              <div class="weapon-icon"><i class="bi bi-swords"></i></div>
+              <div class="weapon-card-title">
+                <h3 x-text="w.display"></h3>
+                <span class="weapon-id" x-text="w.id"></span>
+              </div>
+              <span class="badge" :class="w.enabled ? 'badge-enabled' : 'badge-example'" x-text="w.enabled ? 'Enabled' : 'Example'"></span>
+            </div>
+            <div class="weapon-meta">
+              <span><i class="bi bi-lightning"></i> <span x-text="w.ability"></span></span>
+              <span><i class="bi bi-stopwatch"></i> <span x-text="w.trigger"></span></span>
+            </div>
+            <div class="weapon-materials">
+              <template x-for="m in w.materials" :key="m"><span class="chip" x-text="m"></span></template>
+            </div>
+            <ul class="weapon-lore">
+              <template x-for="line in w.lore" :key="line"><li x-text="line"></li></template>
+            </ul>
+            <div class="weapon-card-foot">
+              <span class="src"><i class="bi bi-file-earmark"></i> <span x-text="w.source"></span></span>
+              <template x-if="w.commands && w.commands.length">
+                <code x-text="'/' + w.commands[0]"></code>
+              </template>
+            </div>
+          </article>
+        </template>
+      </div>
+      <div class="empty-state" x-show="filteredWeapons.length === 0">
+        <i class="bi bi-search"></i>
+        <p>No weapons match your filters.</p>
+      </div>
+
+      <h3 class="sub-head">Ability families detected</h3>
+      <div class="tag-row">
+        <span class="tag">COBWEB_PROJECTILE</span><span class="tag">DASH_AOE</span><span class="tag">EXPLOSIVE_MACE</span>
+        <span class="tag">FLOW_SPEAR</span><span class="tag">FORCE_BOW_DASH</span><span class="tag">GRAVITY_LIFT</span>
+        <span class="tag">PASSIVE / PROJECTILE</span><span class="tag">ROCKET_LIFT</span><span class="tag">SELF_BUFF</span>
+        <span class="tag">SLAM_MACE</span><span class="tag">TIDE_TRIDENT</span><span class="tag">TIMELINE</span>
+        <span class="tag">VENOM_DASH</span><span class="tag">ZOOM_MACE</span>
+      </div>
+    </section>
+
+    <!-- Menus -->
+    <section class="section" id="menus">
+      <div class="section-head"><span class="eyebrow">Menus</span><h2>Weapon menus</h2></div>
+      <p class="text-body">Menus are configured in <code>menus.yml</code>. The bundled admin menu shows all weapons, while the FFA menu registers a dynamic command and lists selected legendary weapons.</p>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>menus:
+  ffa:
+    enabled: true
+    title: '&lt;dark_gray&gt;ʟᴇɢᴇɴᴅᴀʀɪᴇs'
+    size: 36
+    permission: smpweapons.menu.ffa
+    command-permission: smpweapons.command.ffaweapons
+    register-command: true
+    open-commands:
+      - ffaweapons
+    weapons:
+      - dash_sword
+      - dash_mace
+      - wind_spear
+      - venom_sword
+    weapon-slots: [10,12,14,16,19,21,23,25]
+    click-actions:
+      - GET</code></pre>
+      </div>
+    </section>
+
+    <!-- Identity -->
+    <section class="section" id="identity">
+      <div class="section-head"><span class="eyebrow">Compatibility</span><h2>Item identity and legacy matching</h2></div>
+      <p class="text-body">SMPWeapons can identify modern plugin-created items through persistent identity metadata and can also recover legacy/custom items through material aliases, display-name matching, custom model data, and lore matching.</p>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>compatibility:
+  prefer-modern-item-data: true
+  legacy-name-match: true
+  legacy-custom-model-data-match: true
+  legacy-lore-match: true
+  allow-material-fallbacks: true
+legacy:
+  custom-model-data: 23425
+  names-contains: ['Dash Sword']</code></pre>
+      </div>
+    </section>
+
+    <!-- Hooks -->
+    <section class="section" id="hooks">
+      <div class="section-head"><span class="eyebrow">Hooks</span><h2>SMPRegions hook</h2></div>
+      <p class="text-body">When <code>hooks.smp-regions.enabled</code> is true and SMPRegions is installed, SMPWeapons can deny ability use in disallowed PvP areas or explicit blacklisted regions.</p>
+      <div class="code-block" data-lang="yaml">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>hooks:
+  smp-regions:
+    enabled: true
+    deny-when-pvp-denied: true
+    blacklist-regions: []
+    debug: false</code></pre>
+      </div>
+    </section>
+
+    <!-- Troubleshooting -->
+    <section class="section" id="troubleshooting">
+      <div class="section-head"><span class="eyebrow">Support</span><h2>Troubleshooting</h2></div>
+      <div class="card-grid cols-2">
+        <div class="feature-card"><h3><i class="bi bi-question-circle"></i> Weapon does nothing</h3><p>Check <code>enabled: true</code>, material aliases, trigger type, sneak condition, cooldown, region denial, and <code>settings.require-use-permission</code>.</p></div>
+        <div class="feature-card"><h3><i class="bi bi-search"></i> Weapon is not detected</h3><p>Use <code>/smpweapons debug item</code>. Verify persistent identity, legacy display name, custom model data, and material alias fallbacks.</p></div>
+        <div class="feature-card"><h3><i class="bi bi-terminal"></i> Menu command not opening</h3><p>Check <code>commands.register-dynamic-commands</code>, <code>menus.&lt;id&gt;.register-command</code>, <code>open-commands</code>, and the command permission.</p></div>
+        <div class="feature-card"><h3><i class="bi bi-bricks"></i> Temporary blocks remain</h3><p>Run <code>/smpweapons debug restoreblocks</code>. Keep <code>engine.restore-real-blocks-on-disable</code> and <code>restore-real-blocks-on-reload</code> enabled for safety.</p></div>
+      </div>
+    </section>
+
+    <!-- Publishing -->
+    <section class="section" id="publishing">
+      <div class="section-head"><span class="eyebrow">GitHub Pages</span><h2>Publish this wiki</h2></div>
+      <p class="text-body">This repo is static and has no build step. Push the files to a GitHub repository, then enable Pages from the repository root.</p>
+      <div class="code-block" data-lang="bash">
+        <button class="copy-btn" @click="copyCode($event)"><i class="bi bi-clipboard"></i></button>
+        <pre><code>git init
+git add .
+git commit -m "Publish SMPWeapons wiki"
+git branch -M main
+git remote add origin https://github.com/YOUR_USER/smpweapons-page.git
+git push -u origin main</code></pre>
+      </div>
+      <p class="text-body">Then open GitHub → repository Settings → Pages → Source: Deploy from a branch → Branch: <code>main</code> → Folder: <code>/root</code>.</p>
+    </section>
+
+    <footer class="page-footer">
+      <span>SMPWeapons Wiki · static GitHub Pages documentation</span>
+      <span>Generated from bundled SMPWeapons source resources.</span>
+    </footer>
+  </main>
+</div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
